@@ -1,0 +1,3 @@
+使用mindbender的时候，出现：role "root" does not exist
+(创建了root用户后解决)
+之后出现：database "deepdive_spouse_root" does not exist

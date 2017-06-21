@@ -1,1 +1,0 @@
-.should_accept.bats.template

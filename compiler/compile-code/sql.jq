@@ -1,1 +1,0 @@
-../compile-config/sql.jq

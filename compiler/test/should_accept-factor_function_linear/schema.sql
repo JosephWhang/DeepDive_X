@@ -1,1 +1,0 @@
-../stub-app/schema.sql
