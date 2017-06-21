@@ -6,7 +6,7 @@
 ## 一、DeepDive简介
 
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DeepDive 是斯坦福大学研究小组设计的一套智能化数据管理系统，旨在从大量缺乏结构的“暗数据”中挖掘出有用的、结构化的信息。该系统集成了数据提取、集成、预测等功能，能够帮助用户快速地构建出一个复杂的端到端（end-to-end）数据管道。
+DeepDive 是斯坦福大学研究小组设计的一套智能化数据管理系统，旨在从大量缺乏结构的“暗数据”中挖掘出有用的、结构化的信息。该系统集成了数据提取、集成、预测等功能，能够帮助用户快速地构建出一个复杂的端到端（end-to-end）数据管道。
 
 
 **系统特点**
@@ -18,11 +18,11 @@
 
 ## 二、DeepDive 安装与部署
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DeepDive 支持在 Linux 和 Mac 的终端上进行自动化安装。但其安装程序对依赖的安装支持不是很完善（尤其是在中国大陆地区）。笔者下面给出一套完整的安装解决方案，该方案在 ubuntu 14.04 (raw OS) 中测试通过。
+DeepDive 支持在 Mac 和 Linux（Debian 7、8, Ubuntu 12.04, 14.04, 15.04, and 16.04） 的终端上进行自动化安装。但其安装程序对依赖的安装支持不是很完善（尤其是在中国大陆地区）。笔者下面给出一套完整的安装解决方案，该方案在 ubuntu 14.04 (raw OS) 中测试通过。
 
 - ### **安装依赖（注意先后顺序）** ###
 
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;顺利地安装依赖（包括依赖程序和依赖库）是成功配置 DeepDive 的**关键**，但过程比较复杂，执行效果不稳定且容易出错，请务必保持耐心并仔细阅读本指南以及终端输出的相关信息
+  顺利地安装依赖（包括依赖程序和依赖库）是成功配置 DeepDive 的**关键**，但过程比较复杂，执行效果不稳定且容易出错，请务必保持耐心并仔细阅读本指南以及终端输出的相关信息
 
   建议首先改换阿里镜像apt源，在终端输入：
 
@@ -52,7 +52,7 @@
       $ sudo apt-get update
       $ sudo apt-get install oracle-java8-installer
 
-  **url** ： `$ sudo apt-get install curl`
+  **curl** ： `$ sudo apt-get install curl`
 
   **git** ：  `$ sudo apt-get install git`
 
@@ -61,7 +61,8 @@
 - ### **从 git.io 上获取 DeepDive 安装程序** ###
 
   执行：
-      $ bash <(curl -fsSL git.io/getdeepdive)`
+
+      $ bash <(curl -fsSL git.io/getdeepdive)
 
   此后会出现安装界面（以 Ubuntu 为例）：
 
@@ -125,11 +126,12 @@ DeepDive 官方提供了一个具有代表性的 demo，能够提取大量文章
   下载好的 demo 内部已经有了大批文章作为数据流，存放在 `spouse_example/input` 中。为了让数据流导入到本地数据库，需要执行如下操作：
 
       $ sudo ln -s /home/John/spouse_example/input/articles-100.tsv.bz2 /home/John/spouse_example/input/articles.tsv.bz2
+
       $ deepdive do articles
 
- > **注1**：请注意，每次使用deepdive do命令时，它都会打开要在文本编辑器中运行的命令列表。你可以不做修改，键入`Esc`键后输入“:wq”命令直接保存并退出编辑器。
- > 
- > **注2**：由于网络问题，此命令执行极慢，甚至可能永久卡顿；建议安装 lantern 或者 SSR，如果卡顿时间过长，可以尝试先按 Ctrl+C 中断后再次键入命令执行。该过程有成功率，可能需要重复多次。
+  > **注1**：请注意，每次使用deepdive do命令时，它都会打开要在文本编辑器中运行的命令列表。你可以不做修改，键入`Esc`键后输入“:wq”命令直接保存并退出编辑器。
+  > 
+  > **注2**：由于网络问题，此命令执行极慢，甚至可能永久卡顿；建议安装 lantern 或者 SSR，如果卡顿时间过长，可以尝试先按 Ctrl+C 中断后再次键入命令执行。该过程有成功率，可能需要重复多次。
 
 - ### **数据语义处理** ###
 
@@ -181,22 +183,75 @@ DeepDive 官方提供了一个具有代表性的 demo，能够提取大量文章
 
   4. **配偶预测概率查询**
 
-     下述的命令用于查询代号为“fc6a……”文章中配偶候选人是配偶的概率：
+     下述的命令用于查询代号为“c5f8……”的人物分别与其他人是配偶的概率：
 
          $ deepdive sql "
               SELECT p1.mention_text, p2.mention_text, expectation
               FROM has_spouse_label_inference i, person_mention p1, person_mention p2
-              WHERE p1_id LIKE 'fc6ad33a-ae70-41ff-9f0e-7283f85878f6%'
+              WHERE p1_id LIKE 'c5f8a528-cc0f-4f3e-aaef-b9e3b6b003%'
               AND p1_id = p1.mention_id AND p2_id = p2.mention_id"
 
 - ### **数据可视化** ###
 
   DeepDive 的团队开发了一套名为 `Mindbender` 的可视化工具，已伴随 DeepDive 一并安装到了系统之中。下面我们来看一下如何利用这一套工具。
 
-- ## 另附 lantern 安装方法
+  1. 首先将要浏览的数据和关系添加到由 Elasticsearch 驱动的搜索索引（内置）中，执行：
+
+         $ mindbender search update
+
+  2. 成功后，运行本地服务器，启动 GUI，放在后台运行：
+
+         $ mindbender search gui
+
+  3. 用浏览器打开链接 http://localhost:8000 即可开始浏览和搜索数据与关系。
+  
+     >关于查询字符串的语法可以参照 Elasticsearch 手册（链接为https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html#query-string-syntax）
+
+至此，整个项目的安装、运行与检验都已经介绍完毕。用户如果想进一步挖掘 DeepDive 的特性与功能或者希望自己完整定制 app 的话，可以参考 DeepDive 的官方文档，地址是 http://deepdive.stanford.edu/#documentation ，也可以和笔者合作交流。
+
+**笔者邮箱**：wakafa@126.com
+
+
+**参考文献：**
+
+> DeepDive 官方文档：http://deepdive.stanford.edu/#documentation
+> mindbender 项目：https://github.com/HazyResearch/mindbender
+> sbt 官方下载链接：http://www.scala-sbt.org/0.13/docs/Installing-sbt-on-Linux.html
+> java安装：http://blog.csdn.net/hanshileiai/article/details/46968275
+> 阿里源更换：http://blog.csdn.net/jinguangliu/article/details/46539639
+
+## Q&A
+
+**1. 为什么在安装或者运行的时候终端会卡住不动，甚至长达数十分钟？**
+
+   &nbsp;&nbsp;&nbsp;&nbsp;A：很大程度上源于网络问题；尤其是 sbt 工具的配置异常缓慢。可以考虑用 VPN 改善网络环境，或者搜索一些关于 sbt 加速的方法。另外，不建议用终端 `apt` 命令自动安装 sbt 工具。
+
+**2. 在运行命令 `$ sudo apt-get update` 过程中出错中断？**
+
+   &nbsp;&nbsp;&nbsp;&nbsp;A：更换镜像源（如163、ali）可以解决该问题
+
+**3. Linux 没有 GUI 环境如何安装 deb 包？**
+
+   &nbsp;&nbsp;&nbsp;&nbsp;A：利用命令 `$ wget -c http://www.example/package.deb` 下载，之后运行命令 `$ dpkg -i package.deb` 安装。
+
+**4. 执行 `$ bash <(curl -fsSL git.io/getdeepdive)` 进行安装的时候出错？**
+
+   &nbsp;&nbsp;&nbsp;&nbsp;A：如果是超时错误，建议改善网络环境或者重复执行命令进行安装；如果非超时错误，请检查你的安装的 Linux 版本（目前仅支持 Debian 7 and 8, Ubuntu 12.04, 14.04, 15.04, and 16.04），如非支持版本可能会出现依赖包的缺失问题。
+
+**5. 执行 `$ mindbender search update` 时出现 `role "root" does not exist` 或者 `database "deepdive_spouse_root" does not exist` 错误？**
+
+   &nbsp;&nbsp;&nbsp;&nbsp;A：根据观察，该错误源于 DeepDive 系统与 mindbender 系统之间的互动方式缺陷。因此，在运行 app 之前要首先修改 `db.url` 文件中的数据库路径，尤其注意路径中不可以出现 `$USER` 字眼。
+
+**6. 进行数据查询的时候显示空结果？**
+
+   &nbsp;&nbsp;&nbsp;&nbsp;A：首先检查查询语句是否过于严苛或者指向不存在的文章id、人物id等，导致无匹配项；另外可以运行 mindbender 参看数据库情况。如果空结果仍然存在，先检查链接`/home/John/spouse_example/input/articles.tsv.bz2` 是否指向明确，之后可以考虑重新进行数据分析。
+
+## 另附 lantern 安装方法
 
   下载文件：https://raw.githubusercontent.com/getlantern/lantern-binaries/master/lantern-installer-64-bit.deb 直接点击安装
 
   安装成功后直接在终端中输入 `lantern`，然后一直开在后台即可。
 
   期间会弹出一个lantern的网页，不用在意，可以关闭
+
+	
