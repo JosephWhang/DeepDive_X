@@ -12,13 +12,16 @@ DeepDive 是斯坦福大学研究小组设计的一套智能化数据管理系�
 **系统特点**
 
 1. DeepDive 隐藏了核心的技术算法，只需要用户给定数据流并指定必要的数据信号或特征，就能轻松地对数据进行分析。
-2. DeepDive 能够使用来自各种来源的大量数据。使用 DeepDive 构建的应用程序已成功地从数百万个文档、网页、PDF、表格、数据库中提取数据。
-
+2. DeepDive 能够使用各种来源的大量数据。使用 DeepDive 构建的应用程序已成功地从数百万个文档、网页、PDF、表格、数据库中提取数据。
+3. DeepDive 能够使用数据来“远距离”学习。大多数机器学习系统需要对每个预测进行繁琐的训练。但是许多 DeepDive 应用程序，特别是在早期阶段，无需传统的训练数据。
+4. DeepDive 能够学习开发人员给定的知识，通过编写简单的规则来提高结果的质量。DeepDive 还可以考虑用户对预测正确性的反馈以改善预测。
 
 
 ## 二、DeepDive 安装与部署
 
 DeepDive 支持在 Mac 和 Linux（Debian 7、8, Ubuntu 12.04, 14.04, 15.04, and 16.04） 的终端上进行自动化安装。但其安装程序对依赖的安装支持不是很完善（尤其是在中国大陆地区）。笔者下面给出一套完整的安装解决方案，该方案在 ubuntu 14.04 (raw OS) 中测试通过。
+
+### 注：DeepDive 自动化安装脚本测试版已发布，详情请见 [自动化安装](./doc/Autoinstall_zh.md)
 
 - ### **安装依赖（注意先后顺序）** ###
 
@@ -79,7 +82,7 @@ DeepDive 支持在 Mac 和 Linux（Debian 7、8, Ubuntu 12.04, 14.04, 15.04, and
       ## Finished installation for deepdive
       # Install what (enter to repeat options, a to see all, q to quit, or a number)? 
 
-   > 注：如果出现安装时下载速度过慢或卡顿，可以考虑中止后再次键入命令运行，或者使用 lantern 等软件改善网络状况
+   > 注：如果出现安装时下载速度过慢或卡顿，可以考虑中止后再次键入命令运行，或者使用 lantern 等软件改善网络状况 **可以参考 [Lantern 安装](./doc/Lantern_install.md)**
 
 - ### **安装数据库** ###
 
@@ -91,9 +94,9 @@ DeepDive 支持在 Mac 和 Linux（Debian 7、8, Ubuntu 12.04, 14.04, 15.04, and
 
   为了后续的操作方便，建立如下三个软链接：
 
-      $ sudo ln -s /home/John/local/bin/deepdive /bin
-      $ sudo ln -s /home/John/local/bin/ddlog /bin
-      $ sudo ln -s /home/John/local/bin/mindbender /bin
+      $ sudo ln -s /home/$USER/local/bin/deepdive /bin
+      $ sudo ln -s /home/$USER/local/bin/ddlog /bin
+      $ sudo ln -s /home/$USER/local/bin/mindbender /bin
 
   >注：此处的文件路径必须是绝对路径
 
@@ -101,11 +104,11 @@ DeepDive 支持在 Mac 和 Linux（Debian 7、8, Ubuntu 12.04, 14.04, 15.04, and
 
 ## 三、DeepDive 实例运行
 
-DeepDive 官方提供了一个具有代表性的 demo，能够提取大量文章中的人物并预测其中的夫妇关系，我们不妨先来尝试运行这一个简单的实例。 （以下不妨取用户名为 John）
+DeepDive 官方提供了一个具有代表性的 demo，能够提取大量文章中的人物并预测其中的夫妇关系，我们不妨先来尝试运行这一个简单的实例。 
 
 - ### **下载实例** ###
 
-  在终端中输入如下命令将 demo 下载到当前工作目录：
+  在终端中输入如下命令将 demo 下载到当前工作目录（取 `/home/$USER`）：
 
       $ bash <(curl -fsSL git.io/getdeepdive) spouse_example
 
@@ -125,7 +128,7 @@ DeepDive 官方提供了一个具有代表性的 demo，能够提取大量文章
 
   下载好的 demo 内部已经有了大批文章作为数据流，存放在 `spouse_example/input` 中。为了让数据流导入到本地数据库，需要执行如下操作：
 
-      $ sudo ln -s /home/John/spouse_example/input/articles-100.tsv.bz2 /home/John/spouse_example/input/articles.tsv.bz2
+      $ sudo ln -s /home/$USER/spouse_example/input/articles-100.tsv.bz2 /home/$USER/spouse_example/input/articles.tsv.bz2
 
       $ deepdive do articles
 
@@ -141,7 +144,7 @@ DeepDive 官方提供了一个具有代表性的 demo，能够提取大量文章
 
       $ deepdive do spouse_candidate
 
-  >这两个命令执行过程较长，需要耐心等待，可以先去喝杯咖啡
+  >这两个命令执行过程较长，需要耐心等待。同时，命令会占用大量内存，为避免发生内存交换拖慢速度，请至少分配 4GB (建议8GB)  的内存供使用。
 
 - ### **数据预测分析** ###
 
@@ -165,30 +168,30 @@ DeepDive 官方提供了一个具有代表性的 demo，能够提取大量文章
 
          $ deepdive query '?- articles("fc6ad33a-ae70-41ff-9f0e-7283f85878f6", content).' format=csv | grep -v '^$' | tail -n +16 | head
 
-     文章代号可以参照压缩包 `/home/John/spouse_example/input/articles.tsv.bz2` 中的tsv文件（可以用 Excel 打开）
+     文章代号可以参照压缩包 `/home/$USER/spouse_example/input/articles.tsv.bz2` 中的tsv文件（可以用 Excel 打开）
 
   2. **自然语言解析数据查询**
  
      下述的命令用于查询代号为“fc6a……”文章的自然语言解析后数据：
 
-         $ deepdive query '?- sentences("fc6ad33a-   ae70-41ff-9f0e-7283f85878f6", _, _, tokens, _, _, ner_tags, _, _, _).' format=csv | grep PERSON | tail
+         $ deepdive query '?- sentences("fc6ad33a-ae70-41ff-9f0e-7283f85878f6", _, _, tokens, _, _, ner_tags, _, _, _).' format=csv | grep PERSON | tail
 
   3. **配偶候选人查询**
  
-     下述的命令用于查询代号为“fc6a……”文章中辨认出的配偶候选人：
+     下述的命令用于查询代号为“4385……”文章中辨认出的配偶候选人：
 
          $ deepdive query 'name1, name2 ?-
               spouse_candidate(p1, name1, p2, name2),
-              person_mention(p1, _, "fc6ad33a-ae70-41ff-9f0e-7283f85878f6", _, _, _).'
+              person_mention(p1, _, "43859f9c-178c-4df5-9bc7-af2aa5c3a57f", _, _, _).'
 
   4. **配偶预测概率查询**
 
-     下述的命令用于查询代号为“c5f8……”的人物分别与其他人是配偶的概率：
+     下述的命令用于概率大于 0.5 的配偶候选人：
 
          $ deepdive sql "
               SELECT p1.mention_text, p2.mention_text, expectation
               FROM has_spouse_label_inference i, person_mention p1, person_mention p2
-              WHERE p1_id LIKE 'c5f8a528-cc0f-4f3e-aaef-b9e3b6b003%'
+              WHERE expectation >= 0.5
               AND p1_id = p1.mention_id AND p2_id = p2.mention_id"
 
 - ### **数据可视化** ###
@@ -208,17 +211,6 @@ DeepDive 官方提供了一个具有代表性的 demo，能够提取大量文章
      >关于查询字符串的语法可以参照 Elasticsearch 手册（链接为https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html#query-string-syntax）
 
 至此，整个项目的安装、运行与检验都已经介绍完毕。用户如果想进一步挖掘 DeepDive 的特性与功能或者希望自己完整定制 app 的话，可以参考 DeepDive 的官方文档，地址是 http://deepdive.stanford.edu/#documentation ，也可以和笔者合作交流。
-
-**笔者邮箱**：wakafa@126.com
-
-
-**参考文献：**
-
-> DeepDive 官方文档：http://deepdive.stanford.edu/#documentation
-> mindbender 项目：https://github.com/HazyResearch/mindbender
-> sbt 官方下载链接：http://www.scala-sbt.org/0.13/docs/Installing-sbt-on-Linux.html
-> java安装：http://blog.csdn.net/hanshileiai/article/details/46968275
-> 阿里源更换：http://blog.csdn.net/jinguangliu/article/details/46539639
 
 ## Q&A
 
@@ -244,14 +236,17 @@ DeepDive 官方提供了一个具有代表性的 demo，能够提取大量文章
 
 **6. 进行数据查询的时候显示空结果？**
 
-   &nbsp;&nbsp;&nbsp;&nbsp;A：首先检查查询语句是否过于严苛或者指向不存在的文章id、人物id等，导致无匹配项；另外可以运行 mindbender 参看数据库情况。如果空结果仍然存在，先检查链接`/home/John/spouse_example/input/articles.tsv.bz2` 是否指向明确，之后可以考虑重新进行数据分析。
+   &nbsp;&nbsp;&nbsp;&nbsp;A：首先检查查询语句是否过于严苛或者指向不存在的文章id、人物id等，导致无匹配项；另外可以运行 mindbender 参看数据库情况。如果空结果仍然存在，先检查链接`/home/$USER/spouse_example/input/articles.tsv.bz2` 是否指向明确，之后可以考虑重新进行数据分析。
 
-## 另附 lantern 安装方法
+----------
 
-  下载文件：https://raw.githubusercontent.com/getlantern/lantern-binaries/master/lantern-installer-64-bit.deb 直接点击安装
+**笔者邮箱**：wakafa@126.com
 
-  安装成功后直接在终端中输入 `lantern`，然后一直开在后台即可。
+**参考文献：**
 
-  期间会弹出一个lantern的网页，不用在意，可以关闭
+> DeepDive 官方文档：http://deepdive.stanford.edu/#documentation
+> mindbender 项目：https://github.com/HazyResearch/mindbender
+> sbt 官方下载链接：http://www.scala-sbt.org/0.13/docs/Installing-sbt-on-Linux.html
+> java安装：http://blog.csdn.net/hanshileiai/article/details/46968275
+> 阿里源更换：http://blog.csdn.net/jinguangliu/article/details/46539639
 
-	
