@@ -1,6 +1,8 @@
 ## DeepDive 自动化安装
 
-Linux 下的 DeepDive 自动安装脚本测试版已发布，用于简便地在中国大陆地区安装 DeepDive ( 不包括 Demo )。点击 [此处](http://wakafa-1252719529.costj.myqcloud.com/DD_auto.sh) 下载。
+Linux 下的 DeepDive 自动安装脚本测试版已发布，用于简便地在中国大陆地区安装 DeepDive ( 不包括 Demo )。
+
+点击 [此处](http://wakafa-1252719529.costj.myqcloud.com/DD_auto.sh) 下载。
 
 ### **使用方法**
 
